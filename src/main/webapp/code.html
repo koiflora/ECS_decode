@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>code</title>
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!--js引入-->
+    <script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript" src="js/service/codeService.js"></script>
+    <script type="text/javascript" src="js/controller/codeController.js"></script>
+</head>
+<body ng-app="decode" ng-controller="codeController">
+<div class="container" style="width: 400px;">
+    <h3 style="text-align: center;">hello</h3>
+    <form id="formId">
+        <div class="form-group">
+            <label for="code">输入加密或解密的文本：</label>
+            <textarea name="code" id="code" cols="60" rows="10" ng-model="text"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="pwd">加密字符：</label>
+            <input type="text" class="form-control" id="pwd" ng-model="pwd" name="pwd"
+                   placeholder="请输入密码"/>
+        </div>
+        <div class="form-group">
+            <label for="show">answer：</label>
+            <textarea name="show" id="show" cols="60" rows="10" ng-model="show"></textarea>
+        </div>
+
+        <div class="form-group" style="text-align: center">
+            <input class="btn btn-primary" ng-click="code()" type="button" value="加密"/>
+            <input class="btn btn-primary" ng-click="decode()" type="button" value="解密"/>
+            <input class="btn btn-default" type="reset" value="重置"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>

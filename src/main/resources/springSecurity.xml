@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--配置放行的资源-->
+    <security:http pattern="/register.html" security="none"></security:http>
+    <security:http pattern="/user/*.do" security="none"></security:http>
+    <security:http pattern="/login.html" security="none"></security:http>
+    <security:http pattern="/favicon.ico" security="none"></security:http>
+    <security:http pattern="/failer.html" security="none"></security:http>
+    <security:http pattern="/css/**" security="none"></security:http>
+    <security:http pattern="/js/**" security="none"></security:http>
+    <security:http pattern="/images/**" security="none"></security:http>
+    <security:http pattern="/plugins/**" security="none"></security:http>
+    <!--<security:http pattern="/WEB-INF/jsp/user/**" security="none"></security:http>-->
+
+    <!--
+	 security:http针对请求做规则的配置节点
+	 auto-config 表示使用默认配置
+	 use-expressions 表示关闭框架的spel表达式
+	 security:intercept-url 拦截的请求路径
+	 pattern="/**"  拦截所有
+	 access="ROLE_USER" 表示访问资源需要用户拥有ROLE_USER的权限
+	-->
+    <security:http auto-config="true" use-expressions="true">
+        <!--支持多个角色的登录验证  角色之间是或者的关系-->
+        <security:intercept-url pattern="/**"
+                                access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"></security:intercept-url>
+
+        <!--配置自定义的登录节点
+        login-processing-ur 登录表单的请求路径
+        default-target-url 默认登录成功的页面
+        authentication-failure-ur 认证失败的页面
+        login-page 登录页面
+        -->
+        <security:form-login login-processing-url="/login"
+                             default-target-url="/code.html"
+                             authentication-failure-url="/failer.html"
+                             login-page="/login.html"></security:form-login>
+
+        <!--关闭跨域的请求拦截-->
+        <security:csrf disabled="true"></security:csrf>
+
+        <!--配置请求推出的过滤器
+            logout-url="/logOut" 请求退出的url路径
+            logout-success-url="/login.jsp"  注销成功后的挑战页面
+            invalidate-session="true"  设置session无效
+        -->
+        <security:logout logout-url="/logOut" logout-success-url="/login.html" invalidate-session="true"/>
+    </security:http>
+
+    <!--用户的验证节点-->
+    <security:authentication-manager>
+        <!--配置框架使用真实用户业务类做验证
+        自定义的业务类被框架使用需要遵循规则为：
+        接口继承框架的接口对象UserDetailsService 目的实现里面的loadUserByName方法
+        -->
+        <security:authentication-provider user-service-ref="userService">
+            <!--配置框架加密使用的对象-->
+            <!--<security:password-encoder hash="bcrypt"></security:password-encoder>-->
+            <security:password-encoder ref="pwdEncoder"></security:password-encoder>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <!--密码密文加密器-->
+    <bean id="pwdEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+
+</beans>

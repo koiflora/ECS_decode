@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ECS_decode:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="ECS_decode-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="ECS_decode:war exploded" />
+    </root>
+  </artifact>
+</component>
